@@ -1,11 +1,8 @@
-using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
-using UserActivity.CL.WPF.Entities;
 using UserActivity.CL.WPF.Entities.RDF;
-using UserActivity.CL.WPF.Entities.RDF.Mappers;
 
 namespace UserActivity.CL.WPF.Services
 {
@@ -13,42 +10,21 @@ namespace UserActivity.CL.WPF.Services
     {
         public const string RdfFileExtension = "rdf";
 
-        private static readonly IMapper RDFMapper;
+        private readonly IRDFMapper _mapper;
 
-        static RDFUserActivityDataContext()
+        public RDFUserActivityDataContext(IRDFMapper mapper)
         {
-            var mapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<Session, RDFSession>()
-                    .ForMember(s => s.StartDateTimeString, opt => opt.Ignore())
-                    .ForMember(s => s.EndDateTimeString, opt => opt.Ignore())
-                    .ForPath(s => s.Contains.Regions, opt => opt.MapFrom(s => s.Regions));
-
-                cfg.CreateMap<Region, RDFRegion>()
-                    .ForPath(r => r.Contains.Variations, opt => opt.MapFrom(r => r.Variations));
-                cfg.CreateMap<Variation, RDFVariation>()
-                    .ForMember(v => v.Contains, opt => opt.ResolveUsing<EventsListResolver>());
-                cfg.CreateMap<Event, RDFEvent>()
-                    .ForMember(e => e.Name, opt => opt.MapFrom(e => e.CommandName));
-            });
-
-
-            mapperConfig.AssertConfigurationIsValid();
-
-            RDFMapper = mapperConfig.CreateMapper();
+            _mapper = mapper;
         }
 
         public override void CloseSession(Guid sessionUID, DateTimeOffset endDateTime)
         {
             CurrentSession.EndDateTime = endDateTime;
-
-            var events = CurrentSession.Events;
-
             var result = new RDFRoot()
             {
                 Session = new List<RDFSession>()
                 {
-                    RDFMapper.Map<Session, RDFSession>(CurrentSession, opts => opts.Items.Add("events", events))
+                    _mapper.MapToRDF(CurrentSession)
                 }
             };
 
@@ -66,5 +42,6 @@ namespace UserActivity.CL.WPF.Services
             CurrentSession = null;
             CurrentSessionGroup = null;
         }
+
     }
 }

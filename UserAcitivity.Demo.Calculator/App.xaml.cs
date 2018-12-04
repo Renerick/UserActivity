@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using UserActivity.CL.WPF.Entities.RDF.Mappers;
 using UserActivity.CL.WPF.Services;
 
 namespace UserAcitivity.Demo.Calculator
@@ -11,7 +12,7 @@ namespace UserAcitivity.Demo.Calculator
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            UserActivityService.Initialize(new RDFUserActivityDataContext());
+            UserActivityService.Initialize(new RDFUserActivityDataContext(new RDFMapper()));
             UserActivityService.Current.OpenSession();
         }
 
