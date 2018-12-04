@@ -68,17 +68,5 @@ namespace UserActivity.CL.WPF.Services
             return isExist;
         }
 
-        public static SessionGroup LoadSessionGroup(Stream xmlStream)
-        {
-            SessionGroup sessionGroup = null;
-
-            var serializer = new XmlSerializer(typeof(SessionGroup));
-            using (xmlStream)
-            {
-                sessionGroup = (SessionGroup)serializer.Deserialize(xmlStream);
-            }
-
-            return sessionGroup;
-        }
     }
 }

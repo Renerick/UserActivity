@@ -63,6 +63,7 @@
     <Compile Include="Entities\Event.cs" />
     <Compile Include="Entities\EventInfo.cs" />
     <Compile Include="Entities\EventKind.cs" />
+    <Compile Include="Entities\RDF\Mappers\EventsListResolver.cs" />
     <Compile Include="Entities\RDF\RDFCollection.cs" />
     <Compile Include="Entities\RDF\RDFEvent.cs" />
     <Compile Include="Entities\RDF\RDFRoot.cs" />

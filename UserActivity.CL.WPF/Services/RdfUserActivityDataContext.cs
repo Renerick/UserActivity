@@ -2,10 +2,10 @@ using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml.Serialization;
 using UserActivity.CL.WPF.Entities;
 using UserActivity.CL.WPF.Entities.RDF;
+using UserActivity.CL.WPF.Entities.RDF.Mappers;
 
 namespace UserActivity.CL.WPF.Services
 {
@@ -13,25 +13,21 @@ namespace UserActivity.CL.WPF.Services
     {
         public const string RdfFileExtension = "rdf";
 
-        public override void CloseSession(Guid sessionUID, DateTimeOffset endDateTime)
+        private static readonly IMapper RDFMapper;
+
+        static RDFUserActivityDataContext()
         {
-            CurrentSession.EndDateTime = endDateTime;
-
-            var events = CurrentSession.Events;
-
             var mapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Session, RDFSession>()
                     .ForMember(s => s.StartDateTimeString, opt => opt.Ignore())
                     .ForMember(s => s.EndDateTimeString, opt => opt.Ignore())
-                    .ForPath(s => s.Contains.Regions, opt => opt.MapFrom(s => s.Regions))
-                    .ForMember(s => s.UID, opt => opt.AddTransform(s => s.Replace("-", "")));
+                    .ForPath(s => s.Contains.Regions, opt => opt.MapFrom(s => s.Regions));
 
                 cfg.CreateMap<Region, RDFRegion>()
                     .ForPath(r => r.Contains.Variations, opt => opt.MapFrom(r => r.Variations));
                 cfg.CreateMap<Variation, RDFVariation>()
-                    .ForPath(v => v.Contains.SingleClickEvents, opt => opt.MapFrom(v => events.Where(e => e.RegionName == v.RegionName && e.ImageName == v.Name && e.Kind == EventKind.Click)))
-                    .ForPath(v => v.Contains.CommandEvents,opt => opt.MapFrom(v => events.Where(e => e.RegionName == v.RegionName && e.ImageName == v.Name && e.Kind == EventKind.Command)));
+                    .ForMember(v => v.Contains, opt => opt.ResolveUsing<EventsListResolver>());
                 cfg.CreateMap<Event, RDFEvent>()
                     .ForMember(e => e.Name, opt => opt.MapFrom(e => e.CommandName));
             });
@@ -39,14 +35,21 @@ namespace UserActivity.CL.WPF.Services
 
             mapperConfig.AssertConfigurationIsValid();
 
-            var rdfMapper = mapperConfig.CreateMapper();
+            RDFMapper = mapperConfig.CreateMapper();
+        }
+
+        public override void CloseSession(Guid sessionUID, DateTimeOffset endDateTime)
+        {
+            CurrentSession.EndDateTime = endDateTime;
+
+            var events = CurrentSession.Events;
 
             var result = new RDFRoot()
             {
                 Session = new List<RDFSession>()
-                    {
-                        rdfMapper.Map<Session, RDFSession>(CurrentSession)
-                    }
+                {
+                    RDFMapper.Map<Session, RDFSession>(CurrentSession, opts => opts.Items.Add("events", events))
+                }
             };
 
             var namespaces = new XmlSerializerNamespaces();
