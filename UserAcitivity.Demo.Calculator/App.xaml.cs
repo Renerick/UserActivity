@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using UserActivity.CL.WPF.Services;
 
 namespace UserAcitivity.Demo.Calculator
@@ -17,7 +11,7 @@ namespace UserAcitivity.Demo.Calculator
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            UserActivityService.Initialize(new XmlUserActivityDataContext());
+            UserActivityService.Initialize(new RDFUserActivityDataContext());
             UserActivityService.Current.OpenSession();
         }
 

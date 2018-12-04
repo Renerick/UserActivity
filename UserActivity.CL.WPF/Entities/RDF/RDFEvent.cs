@@ -1,35 +1,30 @@
 ﻿using System;
 using System.Globalization;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace UserActivity.CL.WPF.Entities
+namespace UserActivity.CL.WPF.Entities.RDF
 {
     [Serializable]
-    [XmlType(AnonymousType = true)]
-    public partial class Event
+    [XmlType(TypeName = "Event", Namespace = RDFRoot.UsabilityNamespace)]
+    public class RDFEvent
     {
         public const string DateTimeFormat = "o";
 
         [XmlIgnore]
         public DateTimeOffset? DateTime { get; set; }
 
-        [XmlIgnore]
-        public DateTimeOffset? LocalDateTime => DateTime?.ToLocalTime();
-
-        [XmlAttribute("UtcDateTime")]
+        [XmlAttribute("hasDateTime", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
         public string UtcDateTimeString
         {
             get => DateTime?.ToString(DateTimeFormat);
             set => DateTime = string.IsNullOrEmpty(value) ? null : (DateTimeOffset?)DateTimeOffset.ParseExact(value, DateTimeFormat, CultureInfo.CurrentCulture);
         }
 
-        [XmlAttribute]
-        public EventKind Kind { get; set; }
-
         [XmlIgnore]
         public double? InRegionX { get; set; }
 
-        [XmlAttribute("InRegionX")]
+        [XmlAttribute("hasInRegionX", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
         public string InRegionXString
         {
             get => InRegionX?.ToString();
@@ -39,29 +34,14 @@ namespace UserActivity.CL.WPF.Entities
         [XmlIgnore]
         public double? InRegionY { get; set; }
 
-        [XmlAttribute("InRegionY")]
+        [XmlAttribute("hasInRegionY", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
         public string InRegionYString
         {
             get => InRegionY?.ToString();
             set => InRegionY = string.IsNullOrEmpty(value) ? null : (double?)double.Parse(value);
         }
 
-        [XmlAttribute]
-        public string RegionName { get; set; }
-
-        [XmlAttribute]
-        public string ImageName { get; set; }
-
-        [XmlAttribute]
-        public string CommandName { get; set; }
-
-        [XmlIgnore]
-        public double RegionWidth { get; set; }
-
-        [XmlIgnore]
-        public double RegionHeight { get; set; }
-
-        [XmlIgnore]
-        public Region Region { get; set; }
+        [XmlAttribute("hasName", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
+        public string Name { get; set; }
     }
 }

@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UserActivity.CL.WPF.Entities;
 
 namespace UserActivity.CL.WPF.Services
 {
     public class DebugUserActivityDataContext : IUserActivityDataContext
     {
-        public void OpenSession(Guid sessionUID, DateTime startDateTime)
+        public void OpenSession(Guid sessionUID, DateTimeOffset startDateTime)
         {
             Debug.WriteLine("UsabilityMetrics => Session Opened. UID: {0}, StartDateTime: {1}.", sessionUID, startDateTime);
         }
 
-        public void CloseSession(Guid sessionUID, DateTime endDateTime)
+        public void CloseSession(Guid sessionUID, DateTimeOffset endDateTime)
         {
             Debug.WriteLine("UsabilityMetrics => Session Closed. UID: {0}, EndDateTime: {1}.", sessionUID, endDateTime);
         }

@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace UserActivity.CL.WPF.Entities
+namespace UserActivity.CL.WPF.Entities.RDF
 {
     [Serializable]
-    [XmlType(AnonymousType = true)]
-    public class Session
+    [XmlType(TypeName = "Session", Namespace = RDFRoot.UsabilityNamespace)]
+    public class RDFSession
     {
-        public const string DateTimeFormat = "yyyy.MM.dd HH:mm:ss";
+        public const string DateTimeFormat = "o";
 
-        [XmlAttribute]
+        [XmlAttribute("ID", Namespace = RDFRoot.RdfNamespace, Form = XmlSchemaForm.Qualified)]
         public string UID { get; set; }
 
         [XmlIgnore]
         public DateTimeOffset? StartDateTime { get; set; }
 
-        [XmlAttribute("UtcStartDateTime")]
+        [XmlAttribute("hasStartDateTime", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
         public string StartDateTimeString
         {
             get => StartDateTime?.ToString(DateTimeFormat);
@@ -27,17 +28,21 @@ namespace UserActivity.CL.WPF.Entities
         [XmlIgnore]
         public DateTimeOffset? EndDateTime { get; set; }
 
-        [XmlAttribute("UtcEndDateTime")]
+        [XmlAttribute("hasEndDateTime", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
         public string EndDateTimeString
         {
             get => EndDateTime?.ToString(DateTimeFormat);
             set => EndDateTime = string.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.ParseExact(value, DateTimeFormat, CultureInfo.CurrentCulture);
         }
 
-        [XmlArrayItem("Region", IsNullable = true)]
-        public List<Region> Regions { get; private set; } = new List<Region>();
+        [XmlElement("contains")]
+        public RegionList Contains { get; set; }
+    }
 
-        [XmlArrayItem("Event", IsNullable = true)]
-        public List<Event> Events { get; private set; } = new List<Event>();
+    [Serializable]
+    public class RegionList : BaseRDFCollection
+    {
+        [XmlElement("Region", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
+        public List<RDFRegion> Regions { get; set; }
     }
 }

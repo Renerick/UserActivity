@@ -30,6 +30,9 @@ namespace UserActivity.CL.WPF.Entities
         public double Height { get; set; }
 
         [XmlIgnore]
+        public string RegionName { get; set; }
+
+        [XmlIgnore]
         public string Source { get; set; }
 
         [XmlElement(ElementName = "Source")]
