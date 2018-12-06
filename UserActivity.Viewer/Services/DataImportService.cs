@@ -1,9 +1,5 @@
 ﻿using Microsoft.Win32;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UserActivity.CL.WPF.Entities;
 using UserActivity.CL.WPF.Services;
 
@@ -28,7 +24,8 @@ namespace UserActivity.Viewer.Services
 
             var openFileDialog = new OpenFileDialog()
             {
-                Filter = string.Format("UAD-файлы (*.{0})|*.{0}", XmlUserActivityDataContext.UadFileExtension),
+                Filter = string.Format("UAD-файлы (*.{0})|*.{0}|RDF-файлы (*.{1})|*.{1}",
+                    XmlUserActivityDataContext.UadFileExtension, RDFUserActivityDataContext.RdfFileExtension),
                 Multiselect = true,
             };
             bool? result = openFileDialog.ShowDialog();
@@ -38,7 +35,7 @@ namespace UserActivity.Viewer.Services
                 {
                     using (stream)
                     {
-                        var sessionGroup = XmlUserActivityDataContext.LoadSessionGroup(stream);
+                        var sessionGroup = RDFUserActivityDataContext.LoadSessionGroup(stream);
                         groups.Add(sessionGroup);
                     }
                 }

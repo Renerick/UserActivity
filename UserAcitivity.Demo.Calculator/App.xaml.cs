@@ -12,7 +12,7 @@ namespace UserAcitivity.Demo.Calculator
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            UserActivityService.Initialize(new RDFUserActivityDataContext(new RDFMapper()));
+            UserActivityService.Initialize(new RDFUserActivityDataContext(new RDFAutoMapper()));
             UserActivityService.Current.OpenSession();
         }
 

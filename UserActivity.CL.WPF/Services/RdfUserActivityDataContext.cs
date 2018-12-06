@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using UserActivity.CL.WPF.Entities;
 using UserActivity.CL.WPF.Entities.RDF;
+using UserActivity.CL.WPF.Entities.RDF.Mappers;
 
 namespace UserActivity.CL.WPF.Services
 {
@@ -43,5 +45,20 @@ namespace UserActivity.CL.WPF.Services
             CurrentSessionGroup = null;
         }
 
+        public static SessionGroup LoadSessionGroup(Stream xmlStream)
+        {
+            RDFRoot rdf = null;
+
+            var serializer = new XmlSerializer(typeof(RDFRoot));
+            using (xmlStream)
+            {
+                rdf = (RDFRoot)serializer.Deserialize(xmlStream);
+            }
+
+            return new SessionGroup
+            {
+                Sessions = { new RDFAutoMapper().MapFromRDF(rdf.Session[0]) }
+            };
+        }
     }
 }

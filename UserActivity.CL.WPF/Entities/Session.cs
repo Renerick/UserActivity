@@ -21,7 +21,7 @@ namespace UserActivity.CL.WPF.Entities
         public string StartDateTimeString
         {
             get => StartDateTime?.ToString(DateTimeFormat);
-            set => StartDateTime = string.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.ParseExact(value, DateTimeFormat, CultureInfo.CurrentCulture);
+            set => StartDateTime = string.IsNullOrEmpty(value) ? null : (DateTimeOffset?)DateTimeOffset.ParseExact(value, DateTimeFormat, CultureInfo.CurrentCulture);
         }
 
         [XmlIgnore]
@@ -31,7 +31,7 @@ namespace UserActivity.CL.WPF.Entities
         public string EndDateTimeString
         {
             get => EndDateTime?.ToString(DateTimeFormat);
-            set => EndDateTime = string.IsNullOrEmpty(value) ? null : (DateTime?)DateTime.ParseExact(value, DateTimeFormat, CultureInfo.CurrentCulture);
+            set => EndDateTime = string.IsNullOrEmpty(value) ? null : (DateTimeOffset?)DateTimeOffset.ParseExact(value, DateTimeFormat, CultureInfo.CurrentCulture);
         }
 
         [XmlArrayItem("Region", IsNullable = true)]

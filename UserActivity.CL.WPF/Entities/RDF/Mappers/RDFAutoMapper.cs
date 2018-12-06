@@ -3,11 +3,11 @@ using AutoMapper;
 
 namespace UserActivity.CL.WPF.Entities.RDF.Mappers
 {
-    public class RDFMapper : IRDFMapper
+    public class RDFAutoMapper : IRDFMapper
     {
         private static readonly IMapper AutoMapper;
 
-        static RDFMapper()
+        static RDFAutoMapper()
         {
             var mapperConfig = new MapperConfiguration(cfg =>
             {
@@ -26,13 +26,15 @@ namespace UserActivity.CL.WPF.Entities.RDF.Mappers
 
         public Session MapFromRDF(RDFSession session)
         {
-            throw new System.NotImplementedException();
+            return AutoMapper.Map<RDFSession, Session>(session);
         }
 
         private static void CreateMappingsFromRDF(IProfileExpression cfg)
         {
             cfg.CreateMap<RDFSession, Session>()
                .ForMember(s => s.Regions, opt => opt.MapFrom(s => s.Contains.Regions))
+               .ForMember(s => s.StartDateTimeString, opt => opt.Ignore())
+               .ForMember(s => s.EndDateTimeString, opt => opt.Ignore())
                .ForMember(s => s.Events, opt => opt.MapFrom(s =>
                    s.Contains.Regions.SelectMany(r =>
                         r.Contains.Variations.SelectMany(v => v.Contains.SingleClickEvents)
