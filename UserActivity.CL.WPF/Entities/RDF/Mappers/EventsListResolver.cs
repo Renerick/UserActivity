@@ -12,8 +12,8 @@ namespace UserActivity.CL.WPF.Entities.RDF.Mappers
             var events = (IList<Event>)context.Items["events"];
             return new EventsCollection()
             {
-                SingleClickEvents = context.Mapper.Map<IEnumerable<Event>,List<RDFEvent>>(events.Where(e => e.RegionName == source.RegionName && e.ImageName == source.Name && e.Kind == EventKind.Click)),
-                CommandEvents = context.Mapper.Map<IEnumerable<Event>,List<RDFEvent>>(events.Where(e => e.RegionName == source.RegionName && e.ImageName == source.Name && e.Kind == EventKind.Command)),
+                SingleClickEvents = context.Mapper.Map<IEnumerable<Event>,List<RDFSingleClickMouseEvent>>(events.Where(e => e.RegionName == source.RegionName && e.ImageName == source.Name && e.Kind == EventKind.Click)),
+                CommandEvents = context.Mapper.Map<IEnumerable<Event>,List<RDFCommandEvent>>(events.Where(e => e.RegionName == source.RegionName && e.ImageName == source.Name && e.Kind == EventKind.Command)),
             };
         }
     }
@@ -33,7 +33,6 @@ namespace UserActivity.CL.WPF.Entities.RDF.Mappers
                         var newEvent = context.Mapper.Map<Event>(rdfEvent);
                         newEvent.RegionName = region.Name;
                         newEvent.ImageName = variation.Name;
-                        newEvent.Kind = EventKind.Click;
                         result.Add(newEvent);
                     }
 
@@ -42,7 +41,6 @@ namespace UserActivity.CL.WPF.Entities.RDF.Mappers
                         var newEvent = context.Mapper.Map<Event>(rdfEvent);
                         newEvent.RegionName = region.Name;
                         newEvent.ImageName = variation.Name;
-                        newEvent.Kind = EventKind.Command;
                         result.Add(newEvent);
                     }
                 }

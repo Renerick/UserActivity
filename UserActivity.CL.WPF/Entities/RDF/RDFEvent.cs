@@ -46,4 +46,16 @@ namespace UserActivity.CL.WPF.Entities.RDF
         [XmlAttribute("hasName", Form = XmlSchemaForm.Qualified)]
         public string Name { get; set; }
     }
+
+    [XmlType(TypeName = "SingleClickMouseEvent")]
+    public class RDFSingleClickMouseEvent: RDFEvent
+    {
+
+    }
+
+    [XmlType(TypeName = "CommandEvent")]
+    public class RDFCommandEvent : RDFEvent
+    {
+
+    }
 }

@@ -44,9 +44,9 @@ namespace UserActivity.CL.WPF.Entities.RDF
     public class EventsCollection : BaseRDFCollection
     {
         [XmlElement("SingleClickMouseEvent")]
-        public List<RDFEvent> SingleClickEvents { get; set; }
+        public List<RDFSingleClickMouseEvent> SingleClickEvents { get; set; }
 
         [XmlElement("CommandEvent")]
-        public List<RDFEvent> CommandEvents { get; set; }
+        public List<RDFCommandEvent> CommandEvents { get; set; }
     }
 }

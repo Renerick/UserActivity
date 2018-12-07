@@ -51,8 +51,13 @@ namespace UserActivity.CL.WPF.Entities.RDF.Mappers
             cfg.CreateMap<RDFVariation, Variation>()
                .ForMember(v => v.ImageType, opt => opt.UseValue(ImageType.RawJpg));
 
-            cfg.CreateMap<RDFEvent, Event>()
-               .ForMember(e => e.CommandName, opt => opt.MapFrom(e => e.Name));
+            cfg.CreateMap<RDFSingleClickMouseEvent, Event>()
+               .ForMember(e => e.CommandName, opt => opt.MapFrom(e => e.Name))
+               .ForMember(e => e.Kind, opt => opt.UseValue(EventKind.Click));
+
+            cfg.CreateMap<RDFCommandEvent, Event>()
+               .ForMember(e => e.CommandName, opt => opt.MapFrom(e => e.Name))
+               .ForMember(e => e.Kind, opt => opt.UseValue(EventKind.Command));
         }
 
         private static void CreateMappingsToRDF(IProfileExpression cfg)
@@ -69,7 +74,12 @@ namespace UserActivity.CL.WPF.Entities.RDF.Mappers
                .ForMember(v => v.Contains, opt => opt.ResolveUsing<EventsRDFCollectionResolver>());
 
             cfg.CreateMap<Event, RDFEvent>()
-               .ForMember(e => e.Name, opt => opt.MapFrom(e => e.CommandName));
+               .ForMember(e => e.Name, opt => opt.MapFrom(e => e.CommandName))
+               .Include<Event, RDFSingleClickMouseEvent>()
+               .Include<Event, RDFCommandEvent>();
+
+            cfg.CreateMap<Event, RDFSingleClickMouseEvent>();
+            cfg.CreateMap<Event, RDFCommandEvent>();
         }
     }
 }
