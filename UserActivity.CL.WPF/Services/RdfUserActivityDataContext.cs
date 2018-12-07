@@ -30,15 +30,11 @@ namespace UserActivity.CL.WPF.Services
                 }
             };
 
-            var namespaces = new XmlSerializerNamespaces();
-            namespaces.Add("us", RDFRoot.UsabilityNamespace);
-            namespaces.Add("rdf", RDFRoot.RdfNamespace);
-
             var serializer = new XmlSerializer(typeof(RDFRoot));
             var fileName = CurrentSession.UID + "." + RdfFileExtension;
             using (var fileStream = File.Open(fileName, FileMode.OpenOrCreate))
             {
-                serializer.Serialize(fileStream, result, namespaces);
+                serializer.Serialize(fileStream, result);
             }
 
             CurrentSession = null;

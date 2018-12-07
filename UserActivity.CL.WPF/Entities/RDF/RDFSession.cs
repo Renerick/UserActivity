@@ -12,13 +12,13 @@ namespace UserActivity.CL.WPF.Entities.RDF
     {
         public const string DateTimeFormat = "o";
 
-        [XmlAttribute("ID", Namespace = RDFRoot.RdfNamespace, Form = XmlSchemaForm.Qualified)]
+        [XmlAttribute("ID", Form = XmlSchemaForm.Qualified)]
         public string UID { get; set; }
 
         [XmlIgnore]
         public DateTimeOffset? StartDateTime { get; set; }
 
-        [XmlAttribute("hasStartDateTime", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
+        [XmlAttribute("hasStartDateTime", Form = XmlSchemaForm.Qualified)]
         public string StartDateTimeString
         {
             get => StartDateTime?.ToString(DateTimeFormat);
@@ -28,7 +28,7 @@ namespace UserActivity.CL.WPF.Entities.RDF
         [XmlIgnore]
         public DateTimeOffset? EndDateTime { get; set; }
 
-        [XmlAttribute("hasEndDateTime", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
+        [XmlAttribute("hasEndDateTime", Form = XmlSchemaForm.Qualified)]
         public string EndDateTimeString
         {
             get => EndDateTime?.ToString(DateTimeFormat);
@@ -42,7 +42,7 @@ namespace UserActivity.CL.WPF.Entities.RDF
     [Serializable]
     public class RegionList : BaseRDFCollection
     {
-        [XmlElement("Region", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
+        [XmlElement("Region", Form = XmlSchemaForm.Qualified)]
         public List<RDFRegion> Regions { get; set; }
     }
 }

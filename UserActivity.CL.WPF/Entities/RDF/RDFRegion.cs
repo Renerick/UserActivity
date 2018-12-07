@@ -9,7 +9,7 @@ namespace UserActivity.CL.WPF.Entities.RDF
     [XmlType(AnonymousType = true)]
     public class RDFRegion
     {
-        [XmlAttribute("hasName", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
+        [XmlAttribute("hasName", Form = XmlSchemaForm.Qualified)]
         public string Name { get; set; }
 
         [XmlElement("contains", IsNullable = true)]

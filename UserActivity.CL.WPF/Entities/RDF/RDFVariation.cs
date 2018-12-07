@@ -9,19 +9,19 @@ namespace UserActivity.CL.WPF.Entities.RDF
     [XmlType(TypeName = "Variation", Namespace = RDFRoot.UsabilityNamespace)]
     public class RDFVariation
     {
-        [XmlAttribute("hasWidth", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
+        [XmlAttribute("hasWidth", Form = XmlSchemaForm.Qualified)]
         public double Width { get; set; }
 
-        [XmlAttribute("hasHeight", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
+        [XmlAttribute("hasHeight", Form = XmlSchemaForm.Qualified)]
         public double Height { get; set; }
 
-        [XmlAttribute("hasName", Namespace = RDFRoot.UsabilityNamespace, Form = XmlSchemaForm.Qualified)]
+        [XmlAttribute("hasName", Form = XmlSchemaForm.Qualified)]
         public string Name { get; set; }
 
         [XmlIgnore]
         public byte[] Data { get; set; }
 
-        [XmlElement("hasImage", Namespace = RDFRoot.UsabilityNamespace)]
+        [XmlElement("hasImage")]
         public XmlCDataSection DataSection
         {
             get
@@ -43,10 +43,10 @@ namespace UserActivity.CL.WPF.Entities.RDF
     [Serializable]
     public class EventsCollection : BaseRDFCollection
     {
-        [XmlElement("SingleClickMouseEvent", Namespace = RDFRoot.UsabilityNamespace)]
+        [XmlElement("SingleClickMouseEvent")]
         public List<RDFEvent> SingleClickEvents { get; set; }
 
-        [XmlElement("CommandEvent", Namespace = RDFRoot.UsabilityNamespace)]
+        [XmlElement("CommandEvent")]
         public List<RDFEvent> CommandEvents { get; set; }
     }
 }
