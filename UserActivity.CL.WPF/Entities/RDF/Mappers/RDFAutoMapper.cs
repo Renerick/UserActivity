@@ -35,16 +35,21 @@ namespace UserActivity.CL.WPF.Entities.RDF.Mappers
                .ForMember(s => s.Regions, opt => opt.MapFrom(s => s.Contains.Regions))
                .ForMember(s => s.StartDateTimeString, opt => opt.Ignore())
                .ForMember(s => s.EndDateTimeString, opt => opt.Ignore())
-               .ForMember(s => s.Events, opt => opt.MapFrom(s =>
-                   s.Contains.Regions.SelectMany(r =>
-                        r.Contains.Variations.SelectMany(v => v.Contains.SingleClickEvents)
-                         .Concat(r.Contains.Variations.SelectMany(v => v.Contains.CommandEvents)))
-                    .OrderBy(e => e.DateTime)));
+               .ForMember(s => s.Events, opt => opt.ResolveUsing<EventListResolver>())
+               .AfterMap((source, dest) =>
+               {
+                   foreach (var ev in dest.Events)
+                   {
+                       var eventRegion = dest.Regions.Find(r => r.Name == ev.RegionName);
+                       ev.Region = eventRegion;
+                   }
+               });
 
             cfg.CreateMap<RDFRegion, Region>()
                .ForMember(r => r.Variations, opt => opt.MapFrom(r => r.Contains.Variations));
 
-            cfg.CreateMap<RDFVariation, Variation>();
+            cfg.CreateMap<RDFVariation, Variation>()
+               .ForMember(v => v.ImageType, opt => opt.UseValue(ImageType.RawJpg));
 
             cfg.CreateMap<RDFEvent, Event>()
                .ForMember(e => e.CommandName, opt => opt.MapFrom(e => e.Name));
@@ -61,7 +66,7 @@ namespace UserActivity.CL.WPF.Entities.RDF.Mappers
                .ForPath(r => r.Contains.Variations, opt => opt.MapFrom(r => r.Variations));
 
             cfg.CreateMap<Variation, RDFVariation>()
-               .ForMember(v => v.Contains, opt => opt.ResolveUsing<EventsListResolver>());
+               .ForMember(v => v.Contains, opt => opt.ResolveUsing<EventsRDFCollectionResolver>());
 
             cfg.CreateMap<Event, RDFEvent>()
                .ForMember(e => e.Name, opt => opt.MapFrom(e => e.CommandName));
